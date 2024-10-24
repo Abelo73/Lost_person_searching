@@ -325,6 +325,11 @@ public byte[] fetchImageAsByteArray(ImageMetadataNew metadata) {
     }
 
 
+    public void updateLastSeen(Integer userId) {
+        userRepository.updateLastSeen(userId, LocalDateTime.now());
+    }
+
+
 //    public List<ImageMetadataNew> saveProfileImages(Integer userId, List<MultipartFile> files) throws IOException {
 //        List<ImageMetadataNew> imageMetadataList = new ArrayList<>();
 //        for (MultipartFile file : files) {

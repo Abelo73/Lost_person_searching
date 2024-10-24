@@ -84,6 +84,8 @@ public class User implements org.springframework.security.core.userdetails.UserD
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private LocalDateTime lastSeen;
+
 
 
     @Override
@@ -127,6 +129,7 @@ public class User implements org.springframework.security.core.userdetails.UserD
                 ", addressDetails=" + addressDetails +
                 ", profilePicture=" + profilePicture +
                 ", role=" + role +
+                ", lastSeen=" + lastSeen +
                 '}';
     }
 

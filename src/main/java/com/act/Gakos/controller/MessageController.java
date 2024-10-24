@@ -3,6 +3,7 @@ package com.act.Gakos.controller;
 import com.act.Gakos.dto.MessageDto;
 import com.act.Gakos.entity.Message;
 import com.act.Gakos.service.MessageService;
+import com.act.Gakos.service.UserService;
 import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,26 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private UserService userService;
+
+//    @PostMapping("/send")
+//    public ResponseEntity<Message> sendMessage(@RequestParam Integer senderId,
+//                                               @RequestParam Integer receiverId,
+//                                               @RequestBody Map<String, String> payload) {
+//
+//        String content = payload.get("content");
+//        logger.debug("Sending message from user ID {} to user ID {}: {}", senderId, receiverId, content);
+//        Message savedMessage = messageService.sendMessage(senderId, receiverId, content);
+//        if (savedMessage != null) {
+//            logger.info("Message sent successfully: {}", savedMessage);
+//            return ResponseEntity.ok(savedMessage);
+//        } else {
+//            logger.warn("Failed to send message. Sender or receiver not found.");
+//            return ResponseEntity.badRequest().body(null);
+//        }
+//    }
+
     @PostMapping("/send")
     public ResponseEntity<Message> sendMessage(@RequestParam Integer senderId,
                                                @RequestParam Integer receiverId,
@@ -29,8 +50,14 @@ public class MessageController {
 
         String content = payload.get("content");
         logger.debug("Sending message from user ID {} to user ID {}: {}", senderId, receiverId, content);
+
+        // Call your message service to send the message
         Message savedMessage = messageService.sendMessage(senderId, receiverId, content);
+
         if (savedMessage != null) {
+            // Update last seen for the sender after sending the message
+            userService.updateLastSeen(senderId);
+
             logger.info("Message sent successfully: {}", savedMessage);
             return ResponseEntity.ok(savedMessage);
         } else {
@@ -38,6 +65,7 @@ public class MessageController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
 
     @GetMapping("/unread/{receiverId}")
     public ResponseEntity<List<Message>> getUnreadMessages(@PathVariable Long receiverId) {
