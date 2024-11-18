@@ -29,42 +29,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> loadByUsername(String username);
 
 
-
-    // Native query to find a user by token
-//    @Query(value = "SELECT * FROM users WHERE token = ?1", nativeQuery = true)
     Optional<User> findByToken(String token);
 
     Page<User> findByRole(Role role, Pageable pageable);
-
-//    Page<User> searchBySearcgTerms(String searchTerm, String searchTerm1, String searchTerm2, String searchTerm3, PageRequest pageable);
-//@Query(value = "SELECT * FROM users u WHERE " +
-//        "LOWER(u.first_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//        "OR LOWER(u.middle_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//        "OR LOWER(u.last_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//        "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))",
-//        countQuery = "SELECT COUNT(*) FROM users u WHERE " +
-//                "LOWER(u.first_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                "OR LOWER(u.middle_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                "OR LOWER(u.last_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))",
-//        nativeQuery = true)
-//Page<User> searchBySearchTerms(@Param("searchTerm") String searchTerm, Pageable pageable);
-
-
-//    @Query(value = "SELECT * FROM users u WHERE " +
-//            "LOWER(u.first_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//            "OR LOWER(u.middle_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//            "OR LOWER(u.last_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//            "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//            "ORDER BY u.created_at ASC " +
-//            "LIMIT :size OFFSET :page",
-//            countQuery = "SELECT COUNT(*) FROM users u WHERE " +
-//                    "LOWER(u.first_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                    "OR LOWER(u.middle_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                    "OR LOWER(u.last_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
-//                    "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :searchTerm, '%'))",
-//            nativeQuery = true)
-//    Page<User> searchBySearchTerms(@Param("searchTerm") String searchTerm, Pageable pageable);
 
 
     @Query("SELECT u FROM User u WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%')) " +
@@ -81,21 +48,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("UPDATE User u SET u.lastSeen = :lastSeen WHERE u.id = :userId")
     void updateLastSeen(@Param("userId") Integer userId, @Param("lastSeen") LocalDateTime lastSeen);
 
-//    Page<User> findAllUsersWithProfilePictures(Pageable pageable);
-
     @Query(value = "SELECT u.*, pp.* FROM users u " +
             "LEFT JOIN profile_pictures pp ON u.profile_picture_id = pp.id " +
             "ORDER BY u.created_at ASC", nativeQuery = true)
     Page<User> findAllUsersWithProfilePictures(Pageable pageable);
 
-//    @Query(value = "SELECT u.*, pp.* FROM users u " +
-//            "LEFT JOIN profile_pictures pp ON u.profile_picture_id = pp.id " +
-//            "ORDER BY u.created_at ASC " +
-//            "LIMIT :limit OFFSET :offset", nativeQuery = true)
-//    Page<User> findAllUsersWithProfilePictures(@Param("limit") int limit, @Param("offset") int offset);
 
-
-
-
-//    <T> ScopedValue<T> findByUsername(String username);
 }
